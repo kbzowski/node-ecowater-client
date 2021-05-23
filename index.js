@@ -8,17 +8,20 @@ try{
     process.exit(1);
 }
 
+const device = process.env.ECOWATER_DEVICE
+
 while(true) {
-    const last_update = await last_update_time();
+
+    const last_update = await last_update_time(device);
     const now = new Date();
     const diff = (now.getTime() - last_update.getTime()) / 1000;
     if (diff < 10) break;
 
-    await update_stats();
+    await update_stats(device);
     await sleep(5000)
 }
 
-const stats = await get_stats();
+const stats = await get_stats(device);
 
 console.log(`Average daily use: ${stats.avg_daily_use_gals.toFixed(2)} litres`);
 console.log(`Treated water available: ${stats.treated_water_avail_gals.toFixed(2)} litres`);

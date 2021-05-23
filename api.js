@@ -38,10 +38,10 @@ export async function auth(email, password) {
 }
 
 
-export async function last_update_time() {
+export async function last_update_time(device) {
     const update_data = await axios({
         method: 'get',
-        url: 'https://user-field.aylanetworks.com/apiv1/dsns/AC000W007094529/properties/get_frequent_data.json',
+        url: `https://user-field.aylanetworks.com/apiv1/dsns/${device}/properties/get_frequent_data.json`,
         headers,
     })
 
@@ -49,10 +49,10 @@ export async function last_update_time() {
 
 }
 
-export async function update_stats() {
+export async function update_stats(device) {
     await axios({
         method: 'post',
-        url: 'https://user-field.aylanetworks.com/apiv1/dsns/AC000W007094529/properties/get_frequent_data/datapoints.json',
+        url: `https://user-field.aylanetworks.com/apiv1/dsns/${device}/properties/get_frequent_data/datapoints.json`,
         headers,
         data: {
             datapoint: {value: 1.0}
@@ -68,7 +68,7 @@ function get_status(status) {
     }
 }
 
-export async function get_stats() {
+export async function get_stats(device) {
     const props = ['days_since_last_regen', 'treated_water_avail_gals', 'avg_daily_use_gals', 'regen_time_rem_secs',
         'capacity_remaining_percent', 'regen_status_enum', 'average_exhaustion_percent', 'out_of_salt_estimate_days',
         'salt_level_tenths', 'gallons_used_today', 'current_water_flow_gpm'
@@ -76,7 +76,7 @@ export async function get_stats() {
     const query = props.map(p => `names[]=${p}`).join('&')
     const data_response = await axios({
         method: 'get',
-        url: 'https://user-field.aylanetworks.com/apiv1/dsns/AC000W007094529/properties.json?' + query,
+        url: `https://user-field.aylanetworks.com/apiv1/dsns/${device}/properties.json?` + query,
         headers,
     })
 
