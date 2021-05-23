@@ -60,6 +60,17 @@ export async function update_stats(device) {
     })
 }
 
+export async function regenerate(device) {
+    await axios({
+        method: 'post',
+        url: `https://ads-field.aylanetworks.com/apiv1/dsns/${device}/properties/regen_status_enum/datapoints.json'`,
+        headers,
+        data: {
+            datapoint: {value: 2.0}
+        }
+    })
+}
+
 function get_status(status) {
     switch (status) {
         case 0: return "Operational"

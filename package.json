@@ -5,6 +5,11 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "dotenv": "^10.0.0"
+  },
+  "scripts": {
+    "start": "node --experimental-specifier-resolution=node .",
+    "regen": "node --experimental-specifier-resolution=node regenerate.js"
   }
 }

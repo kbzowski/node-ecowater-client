@@ -1,5 +1,8 @@
 import {sleep} from "./helpers";
 import {auth, get_stats, last_update_time, update_stats} from "./api";
+import dotenv from "dotenv"
+
+dotenv.config();
 
 try{
     await auth(process.env.ECOWATER_EMAIL, process.env.ECOWATER_PASSWORD);
