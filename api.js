@@ -1,9 +1,7 @@
 import axios from "axios";
-import {galons_to_litres} from "./helpers";
+import {galons_to_litres, Status} from "./helpers";
 
-
-const ua = 'User-Agent: Dalvik/2.1.0 (Linux; U; Android 9; MI 6 MIUI/V11.0.5.0.PCACNXM)'
-
+const MAX_SALT_LEVEL = 50;      // Change it!
 let headers = {}
 
 export async function auth(email, password) {
@@ -13,7 +11,6 @@ export async function auth(email, password) {
             url: 'https://user-field.aylanetworks.com/users/sign_in.json',
             headers: {
                 'Content-Type': 'application/json',
-                'User-Agent': ua,
             },
             data: {
                 user: {
@@ -30,7 +27,6 @@ export async function auth(email, password) {
         headers = {
             'Authorization': `auth_token ${response.data['access_token']}`,
             'Content-Type': 'application/json',
-            'User-Agent': ua,
         };
     } catch (error) {
         throw new Error("Wrong email or password")
@@ -73,8 +69,10 @@ export async function regenerate(device) {
 
 function get_status(status) {
     switch (status) {
-        case 0: return "Operational"
-        case 2: return "Regeneration"
+        case 0: return Status.Operational
+        case 1: return Status.Scheduled
+        case 2: return Status.Regenerating
+        case 3: return Status.None
         default: return `Unknown: ${status}`
     }
 }
@@ -126,7 +124,7 @@ export async function get_stats(device) {
                 break;
             }
             case "salt_level_tenths":
-                stats['salt_level_tenths'] = value;
+                stats['salt_level'] = value * 100 / MAX_SALT_LEVEL;
                 break;
             case "gallons_used_today":
                 stats['gallons_used_today'] = galons_to_litres(value);

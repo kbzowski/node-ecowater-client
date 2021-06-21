@@ -8,4 +8,9 @@ try{
 }
 
 const device = process.env.ECOWATER_DEVICE
-await regenerate(device)
+
+try {
+    const result = await regenerate(device)
+} catch (e) {
+    console.error(e)
+}
